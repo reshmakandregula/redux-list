@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+}
+
+.contain {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 2rem;
+}
+
+.tableHover {
+  color: black;
+  background-color: lightblue;
+}
