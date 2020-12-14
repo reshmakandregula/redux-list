@@ -113,7 +113,7 @@ class UsersTable extends Component {
                   <td>{currentUser.gender}</td>
                   <td>
                     <button
-                      onClick={() => editUser(currentUser._id)}
+                      onClick={() => editUser(currentUser)}
                       className="btn btn-primary"
                     >
                       Edit

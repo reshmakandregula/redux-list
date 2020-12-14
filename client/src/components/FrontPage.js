@@ -11,6 +11,7 @@ import Pagination from "./Pagination";
 class FrontPage extends Component {
   state = {
     data: {
+      id: "",
       firstName: "",
       lastName: "",
       age: "",
@@ -96,10 +97,44 @@ class FrontPage extends Component {
     );
   };
 
+  // handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const userData = {
+  //     firstName: this.state.data.firstName,
+  //     lastName: this.state.data.lastName,
+  //     age: this.state.data.age,
+  //     gender: this.state.data.gender,
+  //   };
+
+  //   if (!this.validate()) return;
+  //   if (this.state.data.id === "") {
+  //     console.log("addnew");
+  //     this.props.addUser(userData);
+  //     this.props.fetchUsers();
+
+  //     this.setState({
+  //       data: { firstName: "", lastName: "", age: "", gender: "" },
+  //       visible: false,
+  //     });
+  //   } else if (this.state.data.id !== "") {
+  //     console.log("update");
+  //     axios.put("/api/users/" + this.state.data.id, userData);
+  //     this.props.fetchUsers();
+  //     console.log(this.state);
+  //     this.setState({
+  //       data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
+  //       visible: false,
+  //     });
+  //     window.location = "/";
+  //   }
+  //   this.setState({ visible: this.validate() ? false : true });
+  // };
+
   handleSubmit = (e) => {
     e.preventDefault();
-
     const userData = {
+      id: this.state.data.id,
       firstName: this.state.data.firstName,
       lastName: this.state.data.lastName,
       age: this.state.data.age,
@@ -107,58 +142,44 @@ class FrontPage extends Component {
     };
 
     if (!this.validate()) return;
-    if (this.state.currentId === "") {
-      console.log("addnew");
-      this.props.addUser(userData);
-      this.props.fetchUsers();
+    this.props.addUser(userData);
 
-      this.setState({
-        data: { firstName: "", lastName: "", age: "", gender: "" },
-        visible: false,
-      });
-    } else if (this.state.currentId !== "") {
-      console.log("update");
-      axios.put("/api/users/" + this.state.currentId, userData);
-      this.props.fetchUsers();
-      console.log(this.state);
-      this.setState({
-        data: { firstName: "", lastName: "", age: "", gender: "" },
-        visible: false,
-        currentId: "",
-      });
-      window.location = "/";
-    }
     this.setState({ visible: this.validate() ? false : true });
+    window.location = "/";
+    this.setState({
+      data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
+      visible: false,
+    });
   };
 
   handleChange = (e) => {
     this.setState({ search: e.target.value });
   };
 
-  // editUser = (id) => {
-  //   this.setState({
-  //     currentId: id,
-  //     visible: true,
-  //   });
-  //   axios
-  //     .get("/api/users/" + id)
-  //     .then((res) => {
-  //       this.setState({
-  //         modalVisiblitiy: true,
-  //         data: {
-  //           ...this.state.data,
-  //           firstName: res.data.firstName,
-  //           lastName: res.data.lastName,
-  //           age: res.data.age,
-  //           gender: res.data.gender,
-  //         },
-  //       });
-  //       console.log(res.data);
-  //     })
-  //     .catch(function (err) {
-  //       console.log(err);
-  //     });
-  // };
+  editUser = (currentUser) => {
+    this.setState({
+      data: { ...this.state.data, id: currentUser._id },
+      visible: true,
+    });
+    axios
+      .get("/api/users/" + currentUser._id)
+      .then((res) => {
+        this.setState({
+          modalVisiblitiy: true,
+          data: {
+            ...this.state.data,
+            firstName: res.data.firstName,
+            lastName: res.data.lastName,
+            age: res.data.age,
+            gender: res.data.gender,
+          },
+        });
+        console.log(res.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
 
   sortUser = (name) => {
     const users = this.state.users;
@@ -176,7 +197,10 @@ class FrontPage extends Component {
   };
 
   closeModal = () => {
-    this.setState({ visible: !this.state.visible });
+    this.setState({
+      data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
+      visible: false,
+    });
   };
 
   render() {

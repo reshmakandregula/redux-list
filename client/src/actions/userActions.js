@@ -1,4 +1,4 @@
-import { FETCH_USERS, ADD_USER, DELETE_USER } from "./types";
+import { FETCH_USERS, ADD_USER, DELETE_USER, EDIT_USER } from "./types";
 import axios from "axios";
 
 export const fetchUsers = () => (dispatch) => {
@@ -16,19 +16,36 @@ export const fetchUsers = () => (dispatch) => {
     });
 };
 
-export const addUser = (userData) => (dispatch) => {
-  console.log("action called..");
-  axios
-    .post("/api/users", userData)
-    .then((res) =>
-      dispatch({
-        type: ADD_USER,
-        payload: res.data,
-      })
-    )
-    .catch((error) => {
-      console.log(error);
-    });
+export const addUser = (userData) => {
+  if (userData.id) {
+    return (dispatch) => {
+      return axios
+        .put("/api/users/" + userData.id, userData)
+        .then((res) => {
+          const id = res.data;
+          axios.get("/api/users/" + id).then((res) => {
+            dispatch({ type: EDIT_USER, payload: res.data });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  } else {
+    return (dispatch) => {
+      return axios
+        .post("/api/users", userData)
+        .then((res) => {
+          const id = res.data;
+          axios.get("/api/users/" + id).then((res) => {
+            dispatch({ type: ADD_USER, payload: res.data });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  }
 };
 
 export const deleteUser = (id) => (dispatch) => {
