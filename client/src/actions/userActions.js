@@ -1,4 +1,10 @@
-import { FETCH_USERS, ADD_USER, DELETE_USER, EDIT_USER } from "./types";
+import {
+  FETCH_USERS,
+  ADD_USER,
+  DELETE_USER,
+  EDIT_USER,
+  SORT_USER,
+} from "./types";
 import axios from "axios";
 
 export const fetchUsers = () => (dispatch) => {
@@ -62,3 +68,13 @@ export const deleteUser = (id) => (dispatch) => {
       console.log(error);
     });
 };
+
+export function sortUser(name) {
+  console.log("sorting...");
+  return (dispatch) => {
+    return dispatch({
+      type: SORT_USER,
+      payload: name,
+    });
+  };
+}

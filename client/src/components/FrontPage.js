@@ -27,12 +27,12 @@ class FrontPage extends Component {
       age: "",
       gender: "",
     },
-    direction: {
-      firstName: "asc",
-      lastName: "asc",
-      age: "asc",
-      gender: "asc",
-    },
+    // direction: {
+    //   firstName: "asc",
+    //   lastName: "asc",
+    //   age: "asc",
+    //   gender: "asc",
+    // },
   };
 
   componentWillMount() {
@@ -97,40 +97,6 @@ class FrontPage extends Component {
     );
   };
 
-  // handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   const userData = {
-  //     firstName: this.state.data.firstName,
-  //     lastName: this.state.data.lastName,
-  //     age: this.state.data.age,
-  //     gender: this.state.data.gender,
-  //   };
-
-  //   if (!this.validate()) return;
-  //   if (this.state.data.id === "") {
-  //     console.log("addnew");
-  //     this.props.addUser(userData);
-  //     this.props.fetchUsers();
-
-  //     this.setState({
-  //       data: { firstName: "", lastName: "", age: "", gender: "" },
-  //       visible: false,
-  //     });
-  //   } else if (this.state.data.id !== "") {
-  //     console.log("update");
-  //     axios.put("/api/users/" + this.state.data.id, userData);
-  //     this.props.fetchUsers();
-  //     console.log(this.state);
-  //     this.setState({
-  //       data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
-  //       visible: false,
-  //     });
-  //     window.location = "/";
-  //   }
-  //   this.setState({ visible: this.validate() ? false : true });
-  // };
-
   handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -144,12 +110,13 @@ class FrontPage extends Component {
     if (!this.validate()) return;
     this.props.addUser(userData);
 
-    this.setState({ visible: this.validate() ? false : true });
-    window.location = "/";
     this.setState({
       data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
+
       visible: false,
     });
+
+    this.setState({ visible: this.validate() ? false : true });
   };
 
   handleChange = (e) => {
@@ -181,24 +148,10 @@ class FrontPage extends Component {
       });
   };
 
-  sortUser = (name) => {
-    const users = this.state.users;
-    this.setState({
-      users: users.sort((a, b) =>
-        this.state.direction[name] === "asc"
-          ? a[name] < b[name] && -1
-          : a[name] > b[name] && -1
-      ),
-      direction: {
-        [name]: this.state.direction[name] === "asc" ? "desc" : "asc",
-      },
-    });
-    console.log(users);
-  };
-
   closeModal = () => {
     this.setState({
       data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
+      errors: { firstName: "", lastName: "", age: "", gender: "" },
       visible: false,
     });
   };
@@ -236,7 +189,6 @@ class FrontPage extends Component {
           <UsersTable
             search={this.state.search}
             editUser={this.editUser}
-            sortUser={this.sortUser}
             handleChange={this.handleChange}
           />
         </div>

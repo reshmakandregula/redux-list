@@ -3,11 +3,18 @@ import {
   ADD_USER,
   DELETE_USER,
   EDIT_USER,
+  SORT_USER,
 } from "../actions/types";
 
 const initialState = {
   items: [],
   item: {},
+  direction: {
+    firstName: "asc",
+    lastName: "asc",
+    age: "asc",
+    gender: "asc",
+  },
 };
 
 export default function (state = initialState, action) {
@@ -42,6 +49,20 @@ export default function (state = initialState, action) {
               }
             : data
         ),
+      };
+    case SORT_USER:
+      console.log("sort reducer...");
+      let name = action.payload;
+      return {
+        ...state,
+        items: state.items.sort((a, b) =>
+          state.direction[name] === "asc"
+            ? a[name] < b[name] && -1
+            : a[name] > b[name] && -1
+        ),
+        direction: {
+          [name]: state.direction[name] === "asc" ? "desc" : "asc",
+        },
       };
     default:
       return state;

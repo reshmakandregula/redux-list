@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { InputGroup, FormControl, Button, Form } from "react-bootstrap";
-import { deleteUser } from "../actions/userActions";
+import { deleteUser, sortUser } from "../actions/userActions";
 import Pagination from "./Pagination";
 import { connect } from "react-redux";
 
@@ -25,11 +25,31 @@ class UsersTable extends Component {
     }
   };
 
+  // sortUser = (name) => {
+  //   // const users = this.state.users;
+  //   // this.setState({
+  //   //   users: users.sort((a, b) =>
+  //   //     this.state.direction[name] === "asc"
+  //   //       ? a[name] < b[name] && -1
+  //   //       : a[name] > b[name] && -1
+  //   //   ),
+  //   //   direction: {
+  //   //     [name]: this.state.direction[name] === "asc" ? "desc" : "asc",
+  //   //   },
+  //   // });
+  //   // console.log(users);
+  //   this.props.sortUser(name);
+  // };
+
   render() {
     const { deleteUser, editUser, sortUser, search, handleChange } = this.props;
 
     const onDelete = (id) => {
       deleteUser(id);
+    };
+
+    const sortedUser = (name) => {
+      sortUser(name);
     };
 
     const filteredUsers = this.props.users.filter((user) => {
@@ -94,10 +114,10 @@ class UsersTable extends Component {
           <thead className="tableHover">
             <tr>
               <th>Sl.No:</th>
-              <th onClick={() => sortUser("firstName")}>Firstname</th>
-              <th onClick={() => sortUser("lastName")}>lastname</th>
-              <th onClick={() => sortUser("age")}>Age</th>
-              <th onClick={() => sortUser("gender")}>Gender</th>
+              <th onClick={() => sortedUser("firstName")}>Firstname</th>
+              <th onClick={() => sortedUser("lastName")}>lastname</th>
+              <th onClick={() => sortedUser("age")}>Age</th>
+              <th onClick={() => sortedUser("gender")}>Gender</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -180,4 +200,4 @@ const mapStateToProps = (state) => ({
   users: state.users.items,
 });
 
-export default connect(mapStateToProps, { deleteUser })(UsersTable);
+export default connect(mapStateToProps, { deleteUser, sortUser })(UsersTable);
