@@ -55,11 +55,13 @@ export default function (state = initialState, action) {
       let name = action.payload;
       return {
         ...state,
-        items: state.items.sort((a, b) =>
-          state.direction[name] === "asc"
-            ? a[name] < b[name] && -1
-            : a[name] > b[name] && -1
-        ),
+        items: [
+          ...state.items.sort((a, b) =>
+            state.direction[name] === "asc"
+              ? a[name] < b[name] && -1
+              : a[name] > b[name] && -1
+          ),
+        ],
         direction: {
           [name]: state.direction[name] === "asc" ? "desc" : "asc",
         },

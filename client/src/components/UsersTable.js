@@ -42,7 +42,14 @@ class UsersTable extends Component {
   // };
 
   render() {
-    const { deleteUser, editUser, sortUser, search, handleChange } = this.props;
+    const {
+      deleteUser,
+      editUser,
+      sortUser,
+      search,
+      handleChange,
+      users,
+    } = this.props;
 
     const onDelete = (id) => {
       deleteUser(id);
@@ -52,7 +59,7 @@ class UsersTable extends Component {
       sortUser(name);
     };
 
-    const filteredUsers = this.props.users.filter((user) => {
+    const filteredUsers = users.filter((user) => {
       return (
         user.firstName.toLowerCase().includes(search.toLowerCase()) ||
         user.lastName.toLowerCase().includes(search.toLowerCase()) ||

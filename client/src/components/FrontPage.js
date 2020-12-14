@@ -27,12 +27,6 @@ class FrontPage extends Component {
       age: "",
       gender: "",
     },
-    // direction: {
-    //   firstName: "asc",
-    //   lastName: "asc",
-    //   age: "asc",
-    //   gender: "asc",
-    // },
   };
 
   componentWillMount() {
