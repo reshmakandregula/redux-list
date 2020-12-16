@@ -42,21 +42,6 @@ export default function (state = initialState, action) {
         items: state.items.filter((el) => el.id !== action.payload),
       };
 
-    case GET_USER_DETAILS:
-      return {
-        ...state,
-        items: state.items.map((data) =>
-          data._id == action.payload._id
-            ? {
-                ...data,
-                firstName: "vinay",
-                lastName: action.payload.lastName,
-                age: action.payload.age,
-                gender: action.payload.gender,
-              }
-            : data
-        ),
-      };
     case EDIT_USER:
       return {
         ...state,
