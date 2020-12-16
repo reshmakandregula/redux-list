@@ -2,21 +2,24 @@ import {
   FETCH_USERS,
   ADD_USER,
   DELETE_USER,
+  GET_USER_DETAILS,
   EDIT_USER,
   SORT_USER,
+  SHOW_MODAL,
+  CLOSE_MODAL,
 } from "./types";
 import axios from "axios";
+
+const fetchPersons = (data) => ({
+  type: FETCH_USERS,
+  payload: data,
+});
 
 export const fetchUsers = () => (dispatch) => {
   console.log("fetching..");
   axios
     .get("/api/users")
-    .then((res) =>
-      dispatch({
-        type: FETCH_USERS,
-        payload: res.data,
-      })
-    )
+    .then((res) => dispatch(fetchPersons(res.data)))
     .catch((error) => {
       console.log(error);
     });
@@ -75,6 +78,22 @@ export function sortUser(name) {
     return dispatch({
       type: SORT_USER,
       payload: name,
+    });
+  };
+}
+
+export function showModal() {
+  return (dispatch) => {
+    return dispatch({
+      type: SHOW_MODAL,
+    });
+  };
+}
+
+export function closeModal() {
+  return (dispatch) => {
+    return dispatch({
+      type: CLOSE_MODAL,
     });
   };
 }

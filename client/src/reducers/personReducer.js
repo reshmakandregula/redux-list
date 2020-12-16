@@ -2,8 +2,11 @@ import {
   FETCH_USERS,
   ADD_USER,
   DELETE_USER,
+  GET_USER_DETAILS,
   EDIT_USER,
   SORT_USER,
+  SHOW_MODAL,
+  CLOSE_MODAL,
 } from "../actions/types";
 
 const initialState = {
@@ -15,6 +18,9 @@ const initialState = {
     age: "asc",
     gender: "asc",
   },
+  search: "",
+  data: { firstName: "", lastName: "", age: "", gender: "" },
+  isLoading: false,
 };
 
 export default function (state = initialState, action) {
@@ -34,6 +40,22 @@ export default function (state = initialState, action) {
       return {
         ...state,
         items: state.items.filter((el) => el.id !== action.payload),
+      };
+
+    case GET_USER_DETAILS:
+      return {
+        ...state,
+        items: state.items.map((data) =>
+          data._id == action.payload._id
+            ? {
+                ...data,
+                firstName: "vinay",
+                lastName: action.payload.lastName,
+                age: action.payload.age,
+                gender: action.payload.gender,
+              }
+            : data
+        ),
       };
     case EDIT_USER:
       return {
@@ -66,6 +88,19 @@ export default function (state = initialState, action) {
           [name]: state.direction[name] === "asc" ? "desc" : "asc",
         },
       };
+
+    case SHOW_MODAL:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case CLOSE_MODAL:
+      return {
+        ...state,
+        isLoading: false,
+      };
+
     default:
       return state;
   }

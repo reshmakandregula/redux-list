@@ -25,22 +25,6 @@ class UsersTable extends Component {
     }
   };
 
-  // sortUser = (name) => {
-  //   // const users = this.state.users;
-  //   // this.setState({
-  //   //   users: users.sort((a, b) =>
-  //   //     this.state.direction[name] === "asc"
-  //   //       ? a[name] < b[name] && -1
-  //   //       : a[name] > b[name] && -1
-  //   //   ),
-  //   //   direction: {
-  //   //     [name]: this.state.direction[name] === "asc" ? "desc" : "asc",
-  //   //   },
-  //   // });
-  //   // console.log(users);
-  //   this.props.sortUser(name);
-  // };
-
   render() {
     const {
       deleteUser,
@@ -181,18 +165,19 @@ class UsersTable extends Component {
             personsPerPage={this.state.personsPerPage}
             total={filteredUsers.length}
             paginate={paginate}
+            currentPage={this.state.currentPage}
           />
 
           <Button
             variant="link"
-            disabled={currentPage === totalPages ? true : false}
+            disabled={currentPage === Math.ceil(totalPages) ? true : false}
             onClick={nextPage}
           >
             Next
           </Button>
           <Button
             variant="link"
-            disabled={currentPage === totalPages ? true : false}
+            disabled={currentPage === Math.ceil(totalPages) ? true : false}
             onClick={lastPage}
           >
             Last

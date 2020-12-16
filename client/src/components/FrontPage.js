@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { fetchUsers, addUser } from "../actions/userActions";
+import {
+  fetchUsers,
+  addUser,
+  showModal,
+  closeModal,
+} from "../actions/userActions";
 import UsersTable from "./UsersTable";
 import UserModal from "./UserModal";
-import Pagination from "./Pagination";
-
-//import {Link} from "react-router-dom"
 
 class FrontPage extends Component {
   state = {
@@ -31,6 +33,7 @@ class FrontPage extends Component {
 
   componentWillMount() {
     this.props.fetchUsers();
+    // this.props.getUserDetails();
   }
 
   onChange = (e) => {
@@ -103,13 +106,12 @@ class FrontPage extends Component {
 
     if (!this.validate()) return;
     this.props.addUser(userData);
-
+    this.props.closeModal();
     this.setState({
       data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
-
-      visible: false,
     });
-
+    window.location = "/";
+    const visible = this.props.isLoading;
     this.setState({ visible: this.validate() ? false : true });
   };
 
@@ -118,15 +120,15 @@ class FrontPage extends Component {
   };
 
   editUser = (currentUser) => {
+    const { data } = this.state;
+    this.props.showModal();
     this.setState({
-      data: { ...this.state.data, id: currentUser._id },
-      visible: true,
+      data: { ...data, id: currentUser._id },
     });
     axios
       .get("/api/users/" + currentUser._id)
       .then((res) => {
         this.setState({
-          modalVisiblitiy: true,
           data: {
             ...this.state.data,
             firstName: res.data.firstName,
@@ -143,11 +145,15 @@ class FrontPage extends Component {
   };
 
   closeModal = () => {
+    this.props.closeModal();
     this.setState({
       data: { id: "", firstName: "", lastName: "", age: "", gender: "" },
       errors: { firstName: "", lastName: "", age: "", gender: "" },
-      visible: false,
     });
+  };
+
+  onAdd = () => {
+    this.props.showModal();
   };
 
   render() {
@@ -155,14 +161,7 @@ class FrontPage extends Component {
       <div className="container">
         <div className="container" style={{ textAlign: "center" }}>
           <h1>User Entry Details</h1>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              this.setState({
-                visible: !this.state.visible,
-              });
-            }}
-          >
+          <button className="btn btn-primary" onClick={() => this.onAdd()}>
             Add Details
           </button>
         </div>
@@ -170,7 +169,7 @@ class FrontPage extends Component {
         <br />
         <br />
         <div>
-          {this.state.visible && (
+          {this.props.visible && (
             <UserModal
               closeModal={this.closeModal}
               onChange={this.onChange}
@@ -194,6 +193,12 @@ class FrontPage extends Component {
 const mapStateToProps = (state) => ({
   users: state.users.items,
   newUser: state.users.item,
+  visible: state.users.isLoading,
 });
 
-export default connect(mapStateToProps, { fetchUsers, addUser })(FrontPage);
+export default connect(mapStateToProps, {
+  fetchUsers,
+  addUser,
+  showModal,
+  closeModal,
+})(FrontPage);
