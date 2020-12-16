@@ -33,7 +33,6 @@ class FrontPage extends Component {
 
   componentWillMount() {
     this.props.fetchUsers();
-    // this.props.getUserDetails();
   }
 
   onChange = (e) => {
